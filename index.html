@@ -78,9 +78,9 @@
 
       <div>
         <label for="">Sort By Salary: </label>
-        <select name="" id="sorting">
+        <select name="" id="sorting" >
           <option value="">--Select order--</option>
-          <option value="asc">low to high (asc)</option>
+          <option value="asc" selected>low to high (asc)</option>
           <option value="desc">high to low (desc)</option>
         </select>
       </div>
@@ -173,7 +173,7 @@ let totalPages;
 
   function handleGender(value) {
     getData(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=gender&filterValue=${value}`
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=gender&filterValue=${value}&sort=salary&order=${sort.value}`
     );
   }
 
@@ -188,7 +188,7 @@ let totalPages;
   });
   function handleDep(value) {
     getData(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=department&filterValue=${value}`
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=department&filterValue=${value}&sort=salary&order=${sort.value}`
     );
   }
 
