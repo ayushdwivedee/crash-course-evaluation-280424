@@ -108,11 +108,15 @@
 
 <script>
   let tbody = document.querySelector("tbody");
-
+  let pageVal = 1;
+  let flag;
+let totalPages;
   async function getData(URL) {
     let res = await fetch(URL);
     let data = await res.json();
-    // console.log(data.data)
+    // console.log(data)
+    // console.log(data.totalPages)
+    totalPages=data.totalPages;
     displayData(data.data);
   }
 
@@ -142,6 +146,8 @@
     });
   }
 
+  // Sorting By Salary
+
   let sort = document.getElementById("sorting");
 
   sort.addEventListener("change", () => {
@@ -151,32 +157,83 @@
 
   function handleSort(value) {
     getData(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&sort=salary&order=${value}`
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&sort=salary&order=${value}`
     );
   }
+
+  // Filter By Gender
 
   let genderVal = document.getElementById("gender");
 
   genderVal.addEventListener("change", () => {
     // console.log(genderVal.value)
+    flag = true;
     handleGender(genderVal.value);
   });
 
   function handleGender(value) {
     getData(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&filterBy=gender&filterValue=${value}`
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=gender&filterValue=${value}`
     );
   }
+
+  // Filter By Department
 
   let depVal = document.getElementById("dep");
 
   depVal.addEventListener("change", () => {
-    console.log(depVal.value);
+    // console.log(depVal.value);
+    flag = false;
     handleDep(depVal.value);
   });
   function handleDep(value) {
     getData(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&filterBy=department&filterValue=${value}`
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=department&filterValue=${value}`
     );
   }
+
+  //pagination
+  let prevBtn = document.getElementById("prev");
+  let nextBtn = document.getElementById("next");
+
+  nextBtn.addEventListener("click", () => {
+    pageVal++;
+
+    if (pageVal <= totalPages && flag == true) {
+      getData(
+        `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=gender&filterValue=${genderVal.value}&sort=salary&order=${sort.value}`
+      );
+      nextBtn.disabled = false;
+      prevBtn.disabled = false;
+    } else if (pageVal <= totalPages && flag == false) {
+      getData(
+        `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=department&filterValue=${depVal.value}&sort=salary&order=${sort.value}`
+      );
+      nextBtn.disabled = false;
+      prevBtn.disabled = false;
+    } else {
+      nextBtn.disabled = true;
+      // prevBtn.disabled = false;
+    }
+  });
+
+  prevBtn.addEventListener("click", () => {
+    pageVal--;
+    if (pageVal > 0 && flag == true) {
+      getData(
+        `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=gender&filterValue=${genderVal.value}&sort=salary&order=${sort.value}`
+      );
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+    } else if (pageVal > 0 && flag == false) {
+      getData(
+        `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=${pageVal}&limit=10&filterBy=department&filterValue=${depVal.value}&sort=salary&order=${sort.value}`
+      );
+      nextBtn.disabled = false;
+      prevBtn.disabled = false;
+    } else {
+      prevBtn.disabled = true;
+      // nextBtn.disabled = false;
+    }
+  });
 </script>
