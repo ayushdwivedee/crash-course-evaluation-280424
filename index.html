@@ -1,11 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mid Evaluation 280424</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      h1 {
+        text-align: center;
+      }
+      nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: black;
+        height: 50px;
+      }
+      label {
+        color: white;
+        font-size: 22px;
+      }
+      select {
+        font-size: 20px;
+      }
+      table {
+        width: 95%;
+        font-size: 20px;
+        margin: auto;
+        margin-top: 20px;
+        text-align: center;
+      }
+      thead {
+        background-color: gainsboro;
+      }
+      tr {
+        height: 40px;
+      }
+      #buttons {
+        width: 200px;
+        margin: auto;
+      }
+      #buttons > button {
+        margin-top: 40px;
+        font-size: 20px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Employee Management System</h1>
+    <nav>
+      <div>
+        <label for="">Filter By Department: </label>
+        <select name="" id="dep">
+          <option value="">--Select Department--</option>
+          <option value="hr">hr</option>
+          <option value="finance">finance</option>
+          <option value="marketing">marketing</option>
+          <option value="engineering">engineering</option>
+          <option value="operations">operations</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="">Filter By Gender: </label>
+        <select name="" id="gender">
+          <option value="">--Select gender--</option>
+          <option value="male">male</option>
+          <option value="female">female</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="">Sort By Salary: </label>
+        <select name="" id="sorting">
+          <option value="">--Select order--</option>
+          <option value="asc">low to high (asc)</option>
+          <option value="desc">high to low (desc)</option>
+        </select>
+      </div>
+    </nav>
+    <table>
+      <thead>
+        <tr>
+          <th>S.no</th>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Department</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+
+      <tbody></tbody>
+    </table>
+
+    <div id="buttons">
+      <button id="prev">Previous</button>&nbsp;&nbsp;
+      <button id="next">Next</button>
+    </div>
+  </body>
 </html>
+
+<script>
+  let tbody = document.querySelector("tbody");
+
+  async function getData(URL) {
+    let res = await fetch(URL);
+    let data = await res.json();
+    // console.log(data.data)
+    displayData(data.data);
+  }
+
+  getData(
+    "https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10"
+  );
+
+  function displayData(arr) {
+    tbody.innerHTML = null;
+    arr.forEach((el, i) => {
+      let tr = document.createElement("tr");
+      let sNo = document.createElement("td");
+      let name = document.createElement("td");
+      let gender = document.createElement("td");
+      let dep = document.createElement("td");
+      let salary = document.createElement("td");
+
+      sNo.innerText = i + 1;
+      name.innerText = el.name;
+      gender.innerText = el.gender;
+      dep.innerText = el.department;
+      salary.innerText = el.salary;
+
+      tr.append(sNo, name, gender, dep, salary);
+
+      tbody.append(tr);
+    });
+  }
+
+  let sort = document.getElementById("sorting");
+
+  sort.addEventListener("change", () => {
+    // console.log(sort.value)
+    handleSort(sort.value);
+  });
+
+  function handleSort(value) {
+    getData(
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&sort=salary&order=${value}`
+    );
+  }
+
+  let genderVal = document.getElementById("gender");
+
+  genderVal.addEventListener("change", () => {
+    // console.log(genderVal.value)
+    handleGender(genderVal.value);
+  });
+
+  function handleGender(value) {
+    getData(
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&filterBy=gender&filterValue=${value}`
+    );
+  }
+
+  let depVal = document.getElementById("dep");
+
+  depVal.addEventListener("change", () => {
+    console.log(depVal.value);
+    handleDep(depVal.value);
+  });
+  function handleDep(value) {
+    getData(
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&filterBy=department&filterValue=${value}`
+    );
+  }
+
+
+
+</script>
