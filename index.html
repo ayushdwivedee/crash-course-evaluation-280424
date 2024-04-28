@@ -155,30 +155,25 @@
     );
   }
 
-  let genderVal = document.getElementById("gender");
 
-  genderVal.addEventListener("change", () => {
-    // console.log(genderVal.value)
-    handleGender(genderVal.value);
-  });
 
-  function handleGender(value) {
-    getData(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&filterBy=gender&filterValue=${value}`
-    );
-  }
 
-  let depVal = document.getElementById("dep");
 
-  depVal.addEventListener("change", () => {
-    console.log(depVal.value);
-    handleDep(depVal.value);
-  });
-  function handleDep(value) {
-    getData(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees?page=1&limit=10&filterBy=department&filterValue=${value}`
-    );
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
